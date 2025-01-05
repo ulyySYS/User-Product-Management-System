@@ -37,31 +37,39 @@ public class Inventory {
 
 
     // Sorts the tempDB
-    // Arrays.sort arguements takes in Array, from index, to index, comparator
-    // if to and from is not specified, a null error will happen because the array has null values
+    // Arrays.sort(tempDB, Comparator.nullsLast(Comparator.comparing(Product::getID)));
+    // This sorts the product array by name, ignoring nulls.
+    // Null elements are placed at the end of the array.
+    // Uses Comparator.nullsLast to handle nulls and place them at the end, and Comparator.comparing to sort by product name.
     public static void read(String type){
         System.out.println("read method called");
         switch(type){
             case "ID":
-                Arrays.sort(tempDB,0, tempCount, Comparator.comparing(Product::getID));
+                
+                Arrays.sort(tempDB, Comparator.nullsLast(Comparator.comparing(Product::getID)));
                 break;
             case "Name":
-                Arrays.sort(tempDB,0, tempCount, Comparator.comparing(Product::getName));
+               
+                Arrays.sort(tempDB, Comparator.nullsLast(Comparator.comparing(Product::getName)));
                 break;
             case "Brand":
-                Arrays.sort(tempDB,0, tempCount, Comparator.comparing(Product::getBrand));
+                
+                Arrays.sort(tempDB, Comparator.nullsLast(Comparator.comparing(Product::getBrand)));
                 break;
             case "Quantity":
-                Arrays.sort(tempDB,0, tempCount, Comparator.comparing(Product::getQuantity));
+                
+                Arrays.sort(tempDB, Comparator.nullsLast(Comparator.comparing(Product::getQuantity)));
                 break;
             case "Price":
-                Arrays.sort(tempDB,0, tempCount, Comparator.comparing(Product::getPrice));
+                
+                Arrays.sort(tempDB, Comparator.nullsLast(Comparator.comparing(Product::getPrice)));
                 break;
             case "Expiration Date":
-                Arrays.sort(tempDB,0, tempCount, Comparator.comparing(Product::getExpirationDate));
+                
+                Arrays.sort(tempDB, Comparator.nullsLast(Comparator.comparing(Product::getExpirationDate)));
                 break;
             case "Type":
-                Arrays.sort(tempDB,0, tempCount, Comparator.comparing(Product::getType));
+                Arrays.sort(tempDB, Comparator.nullsLast(Comparator.comparing(Product::getType)));
                 break;
             default:
                 System.out.println("Error: Wrong read type: " + type);
