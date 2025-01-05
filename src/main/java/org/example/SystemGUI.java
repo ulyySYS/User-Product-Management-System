@@ -5,6 +5,11 @@
 package org.example;
 
 import javax.swing.table.DefaultTableModel;
+import javax.swing.*;
+import javax.swing.border.LineBorder;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 /**
  *
@@ -12,6 +17,14 @@ import javax.swing.table.DefaultTableModel;
  */
 public class SystemGUI extends javax.swing.JFrame {
     Inventory inventory;
+    boolean nameValidation = false;
+    boolean brandValidation = false;
+    boolean quantityValidation = false;
+    boolean priceValidation  = false;
+    boolean expirationDateValidation = false;
+    boolean descriptionValidation = false;
+    boolean typeValidation = false;
+    boolean costValidation = false;
     /**
      * Creates new form SystemGUI
      */
@@ -55,9 +68,13 @@ public class SystemGUI extends javax.swing.JFrame {
         descriptionlabel = new javax.swing.JLabel();
         brandLabel = new javax.swing.JLabel();
         typelabel = new javax.swing.JLabel();
-        type = new javax.swing.JTextField();
         costlabel = new javax.swing.JLabel();
         cost = new javax.swing.JTextField();
+        type = new javax.swing.JComboBox<>();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        sortByVal = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -65,6 +82,11 @@ public class SystemGUI extends javax.swing.JFrame {
         nameLabel.setText("Product Name:");
 
         productName.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        productName.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                productNameKeyReleased(evt);
+            }
+        });
 
         addBtn.setText("Add Product");
         addBtn.addActionListener(new java.awt.event.ActionListener() {
@@ -73,7 +95,7 @@ public class SystemGUI extends javax.swing.JFrame {
             }
         });
 
-        viewBtn.setText("View All Products");
+        viewBtn.setText("Sort by");
         viewBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 viewBtnActionPerformed(evt);
@@ -96,18 +118,58 @@ public class SystemGUI extends javax.swing.JFrame {
         quantitylabel.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         quantitylabel.setText("Quantity");
 
-        quantity.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        quantity.setFont(new java.awt.Font("Segoe UI", 2, 12)); // NOI18N
+        quantity.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                quantityActionPerformed(evt);
+            }
+        });
+        quantity.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                quantityKeyReleased(evt);
+            }
+        });
 
         pricelabel.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         pricelabel.setText("Price");
 
-        price.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        price.setFont(new java.awt.Font("Segoe UI", 2, 12)); // NOI18N
+        price.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                priceActionPerformed(evt);
+            }
+        });
+        price.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                priceKeyReleased(evt);
+            }
+        });
 
-        expirationDate.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        expirationDate.setFont(new java.awt.Font("Segoe UI", 2, 12)); // NOI18N
+        expirationDate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                expirationDateActionPerformed(evt);
+            }
+        });
+        expirationDate.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                expirationDateKeyReleased(evt);
+            }
+        });
 
         description.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        description.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                descriptionKeyReleased(evt);
+            }
+        });
 
         brand.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        brand.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                brandKeyReleased(evt);
+            }
+        });
 
         idlabel.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         idlabel.setText("Product ID:");
@@ -130,12 +192,36 @@ public class SystemGUI extends javax.swing.JFrame {
         typelabel.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         typelabel.setText("Type");
 
-        type.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-
         costlabel.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         costlabel.setText("cost");
 
-        cost.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        cost.setFont(new java.awt.Font("Segoe UI", 2, 12)); // NOI18N
+        cost.setText("cost of one item");
+        cost.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                costKeyReleased(evt);
+            }
+        });
+
+        type.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Food, Beverages, and Confectionery", "Household and Cleaning Supplies", "Personal Care andHygiene", "Tobacco and Related Products", "Stationery and Office Supplies", "Pet Supplies", "Over-The-Counter(OTC) Medicines", "Electronics and Accessories", "Seasonal and Miscellaneous Items" }));
+        type.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                typeActionPerformed(evt);
+            }
+        });
+        type.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                typeKeyReleased(evt);
+            }
+        });
+
+        jLabel1.setText("must be a number... ex. 1, 2, 3");
+
+        jLabel2.setText("must be a number... ex. 40.3, 20, 10.1");
+
+        jLabel3.setText("mm/dd/yy format");
+
+        sortByVal.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "ID", "Name", "Brand", "Quantity", "Price", "Expiration Date", "Type" }));
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -149,53 +235,60 @@ public class SystemGUI extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(productName, javax.swing.GroupLayout.PREFERRED_SIZE, 323, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(idlabel, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(productID, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addContainerGap()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addContainerGap()
-                                .addComponent(idlabel, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(brandLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(productID, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(brand, javax.swing.GroupLayout.PREFERRED_SIZE, 323, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addContainerGap()
+                                .addComponent(quantitylabel, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addComponent(descriptionlabel, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(description, javax.swing.GroupLayout.PREFERRED_SIZE, 323, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addComponent(brandLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(brand, javax.swing.GroupLayout.PREFERRED_SIZE, 323, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addComponent(quantitylabel, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(quantity, javax.swing.GroupLayout.PREFERRED_SIZE, 323, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addComponent(pricelabel, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(price, javax.swing.GroupLayout.PREFERRED_SIZE, 323, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addComponent(expDatelabel, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(expirationDate, javax.swing.GroupLayout.PREFERRED_SIZE, 323, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addComponent(typelabel, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(type, javax.swing.GroupLayout.PREFERRED_SIZE, 323, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                    .addComponent(jLabel1)
+                                    .addComponent(quantity, javax.swing.GroupLayout.PREFERRED_SIZE, 323, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(39, 39, 39)
+                                .addComponent(pricelabel, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel2)
+                                    .addComponent(price, javax.swing.GroupLayout.PREFERRED_SIZE, 323, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addComponent(expDatelabel, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel3)
+                                    .addComponent(expirationDate, javax.swing.GroupLayout.PREFERRED_SIZE, 323, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(descriptionlabel, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(description, javax.swing.GroupLayout.PREFERRED_SIZE, 323, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(typelabel, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(type, javax.swing.GroupLayout.PREFERRED_SIZE, 235, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(27, 27, 27)
                                 .addComponent(addBtn)
                                 .addGap(18, 18, 18)
-                                .addComponent(viewBtn))
+                                .addComponent(viewBtn)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(sortByVal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addContainerGap()
                                 .addComponent(costlabel, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(cost, javax.swing.GroupLayout.PREFERRED_SIZE, 323, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(cost, javax.swing.GroupLayout.PREFERRED_SIZE, 323, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 41, Short.MAX_VALUE)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 528, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(41, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -216,33 +309,41 @@ public class SystemGUI extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(quantitylabel)
                     .addComponent(quantity, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                .addGap(2, 2, 2)
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(price, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(pricelabel))
-                .addGap(18, 18, 18)
+                    .addComponent(pricelabel)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(price, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel2)))
+                .addGap(35, 35, 35)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(expDatelabel)
                     .addComponent(expirationDate, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(4, 4, 4)
+                .addComponent(jLabel3)
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(descriptionlabel)
                     .addComponent(description, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(typelabel)
-                    .addComponent(type, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                    .addComponent(type, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(costlabel)
                     .addComponent(cost, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 22, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(addBtn)
-                    .addComponent(viewBtn))
-                .addGap(59, 59, 59))
+                    .addComponent(viewBtn)
+                    .addComponent(sortByVal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(44, Short.MAX_VALUE)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 467, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(23, 23, 23))
         );
@@ -251,7 +352,9 @@ public class SystemGUI extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -261,32 +364,183 @@ public class SystemGUI extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    //displays the inventory database
     private void viewBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewBtnActionPerformed
         // TODO add your handling code here:
-        inventory.read();
+        // selected Sort option
+        String selectedVal = (String) sortByVal.getSelectedItem();
+        inventory.read(selectedVal);
         updateProductsTable();
     }//GEN-LAST:event_viewBtnActionPerformed
 
+    // adds the input to the inventory database
+    // sets the input fields to empty, calls setID, and updates the table
     private void addBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addBtnActionPerformed
         // TODO add your handling code here:
         DefaultTableModel tblmodel1 = (DefaultTableModel) jTable1.getModel();
         String priceStr = price.getText();
         String quantityStr = quantity.getText();
         String costStr = cost.getText();
+        String selectedType = (String) type.getSelectedItem();
         
-        inventory.add(productName.getText(), brand.getText(), Double.parseDouble(priceStr), Integer.parseInt(quantityStr), expirationDate.getText(), type.getText(), description.getText(),Double.parseDouble(costStr) );
+        inventory.add(productName.getText(), brand.getText(), Double.parseDouble(priceStr), Integer.parseInt(quantityStr),                          expirationDate.getText(), selectedType, description.getText(),Double.parseDouble(costStr) );
 
         productName.setText("");
         price.setText("");
         quantity.setText("");
         brand.setText("");
         expirationDate.setText("");
-        type.setText("");
         description.setText("");
         cost.setText("");
         setID();
+        
+        updateProductsTable();
     }//GEN-LAST:event_addBtnActionPerformed
 
+    
+    private void productNameKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_productNameKeyReleased
+        // TODO add your handling code here: 
+        if(productName.getText() != " "){
+            nameValidation = true;
+        } else{
+            nameValidation = false;
+            productName.setBorder(new LineBorder(Color.RED, 2));
+        }
+    }//GEN-LAST:event_productNameKeyReleased
+
+    private void priceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_priceActionPerformed
+        // TODO add your handling code here:
+        
+    }//GEN-LAST:event_priceActionPerformed
+
+    private void expirationDateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_expirationDateActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_expirationDateActionPerformed
+
+    private void brandKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_brandKeyReleased
+        // TODO add your handling code here:
+        if(brand.getText() != " "){
+            brandValidation = true;
+        } else{
+            brandValidation = false;
+            brand.setBorder(new LineBorder(Color.RED, 2));
+        }
+    }//GEN-LAST:event_brandKeyReleased
+
+    private void quantityKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_quantityKeyReleased
+        // TODO add your handling code here:
+        try{
+            int tempNum = Integer.parseInt(quantity.getText());
+            quantityValidation = true;
+        } catch(NumberFormatException nfe){
+            quantityValidation = false;
+            quantity.setBorder(new LineBorder(Color.RED, 2));
+        }
+        
+    }//GEN-LAST:event_quantityKeyReleased
+
+    private void priceKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_priceKeyReleased
+        // TODO add your handling code here:
+        try{
+            double tempNum = Double.parseDouble(price.getText());
+            priceValidation = true;
+        } catch(NumberFormatException nfe){
+            priceValidation = false;
+            price.setBorder(new LineBorder(Color.RED, 2));
+        }
+    }//GEN-LAST:event_priceKeyReleased
+
+    private void expirationDateKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_expirationDateKeyReleased
+        // TODO add your handling code here:
+        expirationDateValidation = false;
+        String BdayInput = expirationDate.getText().trim();
+        int firstSlash = BdayInput.indexOf("/");
+        int secondSlash = BdayInput.indexOf("/", firstSlash + 1);
+        String month = "0";
+        String day = "0";
+        String year = "0";
+        
+        // Checks if MONTH input is a digit 
+        for(int i = 0; i < firstSlash; i++){
+            char currentChar = BdayInput.charAt(i);
+            
+            if(!Character.isDigit(currentChar)){
+                month = "0"; // This resets the string value
+                
+                break;
+            }
+            month = month + currentChar;  
+        }
+        
+        // Checks if DAY input is a digit
+        for(int i = firstSlash + 1; i < secondSlash; i++){
+            char currentChar = BdayInput.charAt(i);
+            if(!Character.isDigit(currentChar)){
+                day = "0"; // This resets the string value
+                break;
+            }
+            day = day + currentChar;  
+        }
+        
+        // Checks if YEAR input is a digit
+        for(int i = secondSlash + 1; i < BdayInput.length(); i++){
+            char currentChar = BdayInput.charAt(i);
+            if(!Character.isDigit(currentChar)){
+                year = "0"; // This resets the string value
+                break;
+            }
+            year = year + currentChar;  
+        }
+        
+       
+        int monthNum = Integer.parseInt(month);
+        int dayNum = Integer.parseInt(day);
+        int yearNum = Integer.parseInt(year);
+            
+        // Checks if there is atleast one number before slashes
+        if(firstSlash == 2 && (firstSlash + 3) == secondSlash && monthNum > 0 && monthNum <= 12 &&  dayNum > 0 && dayNum <= 31 && yearNum > 1000 && yearNum < 2025){
+            expirationDateValidation = true;
+        } 
+        else{
+            expirationDate.setBorder(new LineBorder(Color.RED, 2));
+        }
+    }//GEN-LAST:event_expirationDateKeyReleased
+
+    private void descriptionKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_descriptionKeyReleased
+        // TODO add your handling code here:
+        if(description.getText() != " "){
+            descriptionValidation = true;
+        } else{
+            descriptionValidation = false;
+            description.setBorder(new LineBorder(Color.RED, 2));
+        }
+    }//GEN-LAST:event_descriptionKeyReleased
+
+    private void typeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_typeActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_typeActionPerformed
+
+    private void typeKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_typeKeyReleased
+        // TODO add your handling code here:
+       
+    }//GEN-LAST:event_typeKeyReleased
+
+    private void costKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_costKeyReleased
+        try{
+            int tempNum = Integer.parseInt(quantity.getText());
+            costValidation = true;
+        } catch(NumberFormatException nfe){
+            costValidation = false;
+            cost.setBorder(new LineBorder(Color.RED, 2));
+        }        // TODO add your handling code here:
+    }//GEN-LAST:event_costKeyReleased
+
+    private void quantityActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_quantityActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_quantityActionPerformed
+
+    // updates the table 
+    // takes data from inventory
     public void updateProductsTable(){
         DefaultTableModel tblmodel = (DefaultTableModel) jTable1.getModel();
         tblmodel.setRowCount(0);
@@ -301,6 +555,8 @@ public class SystemGUI extends javax.swing.JFrame {
         }
     }
     
+    // sets the ID for the product
+    // ID is based on the idCount on inventory
     public void setID(){
         String tempVar = Integer.toString( inventory.idCount);
         productID.setText(tempVar);
@@ -352,6 +608,9 @@ public class SystemGUI extends javax.swing.JFrame {
     private javax.swing.JLabel expDatelabel;
     private javax.swing.JTextField expirationDate;
     private javax.swing.JLabel idlabel;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
@@ -362,7 +621,8 @@ public class SystemGUI extends javax.swing.JFrame {
     private javax.swing.JTextField productName;
     private javax.swing.JTextField quantity;
     private javax.swing.JLabel quantitylabel;
-    private javax.swing.JTextField type;
+    private javax.swing.JComboBox<String> sortByVal;
+    private javax.swing.JComboBox<String> type;
     private javax.swing.JLabel typelabel;
     private javax.swing.JButton viewBtn;
     // End of variables declaration//GEN-END:variables

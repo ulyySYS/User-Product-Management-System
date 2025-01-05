@@ -26,4 +26,14 @@ public class Product {
         this.cost = cost;
         this.type = type;
     }
+    
+    // methods that return product data
+    // this is for the sorting of the array hehe
+    public int getID(){return id;}
+    public String getName(){return name;}
+    public String getBrand(){return brand;}
+    public Double getPrice(){return price;}
+    public int getQuantity(){return quantity;}
+    public String getExpirationDate(){return expirationDate;}
+    public String getType(){return type;}
 }
